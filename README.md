@@ -9,8 +9,16 @@ Two real Purplle stores processed — **ST1008** (Brigade Road, Bangalore, 4 cam
 
 ---
 
-## Quick start (2 commands, real data included)
+## Quick start (Real data included, zero manual setup)
 
+### Option A: Docker (Recommended for reviewers)
+```bash
+cd store-intelligence
+docker compose up --build -d
+```
+The API and Postgres database will boot up. On first boot, it auto-seeds the database with the real POS logs and CCTV-derived events. No manual replay step is needed!
+
+### Option B: Local Python
 ```bash
 cd store-intelligence
 pip install -r requirements.txt

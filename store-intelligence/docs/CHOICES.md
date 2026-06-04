@@ -119,8 +119,8 @@ cached from yesterday*?
 - **Pre-aggregated rollup tables** updated on ingest — O(1) reads, but a staleness/consistency
   surface and premature at this scale.
 - **A streaming engine (Kafka/Flink)** — right at 40 live stores, wildly over-engineered for
-  the challenge and would fail the "runs with `docker compose up`, minimal setup" gate.
-- **Raw events + compute-on-read**, Postgres in compose / SQLite in tests via SQLAlchemy.
+  the challenge and would fail the "runs with `docker compose up`, minimal setup" requirement.
+- **Raw events + compute-on-read**, Postgres in compose / SQLite in tests via SQLAlchemy. *Crucially, I designed the API to auto-seed itself from `events.jsonl` on first boot under Docker, guaranteeing reviewers an instantly working dashboard.*
 
 **What the LLM suggested:** the LLM leaned toward adding a rollup/cache layer "for
 real-time performance."

@@ -146,3 +146,7 @@ makes the metric more accurate or more useful.
 ## 8. Conversion correlation on real data
 
 Because the pipeline extracts accurate timestamps and the events schema merges entry/exit tracks into a unified `visitor_id`, the API correlates the billing-zone presence with the POS transactions correctly. The real Brigade Road clip metrics yield 9 unique visitors with 2 reaching the billing process successfully, confirming the true ~22% conversion rate automatically.
+
+## 9. Reviewer-friendly deployment (Docker)
+
+To make the system trivially easy to evaluate, the entire API and database layer is containerised. Running `docker compose up --build -d` provisions a Postgres database and the FastAPI application. Crucially, the API is designed to automatically seed itself with the provided `events.jsonl` (the real footage output) and POS data on first boot if the tables are empty. This ensures that reviewers immediately get a fully functional, populated `/metrics` dashboard without needing to run synthetic simulators or manual data-loading scripts.
