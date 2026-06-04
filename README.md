@@ -19,6 +19,8 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 Open **http://localhost:8000** — live dashboard with real footage-derived events auto-seeded.
 
+> 🌟 **Live Demo:** You can view a static snapshot of the dashboard (seeded with real footage data) here: **[https://harlequin-hildegaard-10.tiiny.site/](https://harlequin-hildegaard-10.tiiny.site/)**
+
 ```bash
 # Stream events in real time and watch the dashboard update live
 python tools/simulate.py --from-file data/events.jsonl --rt 0.1

@@ -31,6 +31,7 @@ curl http://localhost:8000/stores/ST1008/metrics
 
 # 3. open the live dashboard
 #    http://localhost:8000
+#    (Or view the live static snapshot online: https://harlequin-hildegaard-10.tiiny.site/)
 
 # 4. (optional, dashboard bonus) stream events in simulated real-time and watch it move
 python tools/simulate.py --api http://localhost:8000 --live --store ST1008
