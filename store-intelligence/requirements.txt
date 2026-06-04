@@ -1,0 +1,14 @@
+# Intelligence API runtime (Part B/C). CV deps live in pipeline/requirements.txt.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+SQLAlchemy==2.0.36
+psycopg2-binary==2.9.10
+python-dateutil==2.9.0.post0
+requests==2.32.3   # used by tools/simulate.py (replay/live) to POST events to the API
+# --- test/dev ---
+pytest==8.3.4
+pytest-cov==6.0.0
+httpx==0.28.1
+numpy==2.2.1   # used by pipeline/tracker.py (Re-ID math); kept here so the test
+               # suite can exercise pipeline logic without the full CV stack.

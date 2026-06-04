@@ -1,0 +1,15 @@
+# Challenge footage — not redistributable
+CCTV Footage/
+
+# Challenge PDFs and raw data files at repo root
+*.pdf
+*.xlsx
+*.csv
+sample_events*.jsonl
+
+# IDE / tool dirs
+.claude/
+.gemini/
+__pycache__/
+*.pyc
+.DS_Store

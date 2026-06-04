@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apex Retail · Store Intelligence</title>
+<style>
+  /* ---- design tokens (OKLCH; deep operations-console neutral + one indigo accent) ---- */
+  :root {
+    --bg:        oklch(0.16 0.018 265);
+    --surface:   oklch(0.215 0.022 265);
+    --surface-2: oklch(0.26 0.028 265);
+    --line:      oklch(0.33 0.03 265);
+    --line-soft: oklch(0.28 0.026 265);
+    --ink:       oklch(0.97 0.008 265);
+    --muted:     oklch(0.76 0.022 265);
+    --faint:     oklch(0.62 0.025 265);
+    --accent:    oklch(0.72 0.17 277);
+    --accent-ink:oklch(0.86 0.12 277);
+    --good:      oklch(0.80 0.16 155);
+    --warn:      oklch(0.84 0.15 85);
+    --crit:      oklch(0.70 0.21 25);
+    --radius: 16px;
+    --mono: ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: ui-sans-serif, system-ui, "Segoe UI Variable", "Segoe UI", Roboto, sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    /* semantic z-index scale */
+    --z-sticky: 100; --z-tooltip: 600;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    line-height: 1.45; letter-spacing: -0.011em;
+    font-variant-numeric: tabular-nums;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 26px clamp(16px, 4vw, 44px) 72px; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+  /* ---- header ---- */
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px 20px; flex-wrap: wrap; padding-bottom: 22px; }
+  .brand { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+  .brand h1 { font-size: 1.55rem; margin: 0; font-weight: 760; letter-spacing: -0.03em; }
+  .brand .sub { color: var(--faint); font-size: 0.9rem; letter-spacing: 0; }
+  .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-width: 0; }
+  @media (max-width: 600px) { .brand .sub { flex-basis: 100%; } }
+  select {
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 10px; padding: 9px 30px 9px 12px; font: inherit; font-size: 0.92rem; font-weight: 560;
+    appearance: none; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 16px) 17px, calc(100% - 11px) 17px; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+  }
+  select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .live { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.82rem; font-family: var(--mono);
+    background: var(--surface); border: 1px solid var(--line-soft); border-radius: 999px; padding: 7px 13px 7px 11px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex: none; }
+  .dot.pulse { animation: pulse 2.4s var(--ease) infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--good) 65%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+  .dot.stale { background: var(--warn); } .dot.stale.pulse { animation-name: pulseW; }
+  @keyframes pulseW { 0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--warn) 65%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+  .dot.down { background: var(--crit); animation: none; }
+
+  /* ---- hero: the North Star ---- */
+  .hero { display: grid; grid-template-columns: 1.45fr 1fr; gap: 18px; margin-bottom: 16px; }
+  @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } }
+  .northstar {
+    position: relative; overflow: hidden; border-radius: var(--radius); min-width: 0;
+    background: var(--surface); border: 1px solid var(--line); padding: 26px 30px 28px;
+    display: flex; flex-direction: column; justify-content: center; min-height: 196px;
+  }
+  .ns-sub { overflow-wrap: anywhere; }
+  .northstar::before { content: ""; position: absolute; inset: 0;
+    background: radial-gradient(115% 130% at 6% -10%, color-mix(in oklch, var(--accent) 20%, transparent), transparent 55%);
+    pointer-events: none; }
+  .northstar > * { position: relative; }
+  .ns-label { color: var(--muted); font-size: 0.92rem; font-weight: 540; }
+  .ns-label .star { color: var(--accent-ink); }
+  .ns-value { font-size: clamp(3rem, 8vw, 4.9rem); font-weight: 820; letter-spacing: -0.045em; line-height: 0.96; margin: 8px 0 2px; }
+  .ns-sub { color: var(--faint); font-size: 0.92rem; font-family: var(--mono); }
+  .ns-sub b { color: var(--muted); font-weight: 600; }
+
+  .vitals { display: grid; grid-template-rows: repeat(3, 1fr); gap: 12px; min-width: 0; }
+  @media (max-width: 760px) { .vitals { grid-template-rows: none; grid-template-columns: 1fr; } }
+  .vital { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 13px; padding: 13px 17px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-width: 0; }
+  .vital .v-num { font-size: 1.7rem; font-weight: 720; letter-spacing: -0.03em; line-height: 1; flex: none; }
+  .vital .v-meta { text-align: right; min-width: 0; }
+  .vital .v-label { color: var(--muted); font-size: 0.84rem; font-weight: 540; overflow-wrap: anywhere; }
+  .vital .v-delta { color: var(--faint); font-size: 0.76rem; font-family: var(--mono); margin-top: 3px; overflow-wrap: anywhere; }
+  .flash { animation: flash 0.7s var(--ease); }
+  @keyframes flash { 0% { color: var(--accent-ink); } 100% { color: var(--ink); } }
+
+  .ctx { margin: 2px 0 20px; padding: 12px 16px; border-radius: 12px;
+    background: color-mix(in oklch, var(--accent) 9%, var(--surface)); border: 1px solid color-mix(in oklch, var(--accent) 26%, var(--line-soft));
+    color: var(--muted); font-size: 0.86rem; line-height: 1.55; }
+  .ctx b { color: var(--ink); font-weight: 620; }
+
+  /* ---- panels ---- */
+  .cols { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 16px; align-items: start; }
+  .cols > * { min-width: 0; }
+  @media (max-width: 920px) { .cols { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 16px; min-width: 0; }
+  .panel:last-child { margin-bottom: 0; }
+  .panel-h { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .panel-h h2 { font-size: 1.02rem; font-weight: 660; letter-spacing: -0.02em; margin: 0; }
+  .panel-h .hint { color: var(--faint); font-weight: 400; font-size: 0.8rem; font-family: var(--mono); min-width: 0; overflow-wrap: anywhere; }
+
+  /* ---- funnel ---- */
+  .funnel { display: flex; flex-direction: column; gap: 9px; }
+  .frow { display: grid; grid-template-columns: 124px 1fr auto; align-items: center; gap: 14px; }
+  @media (max-width: 560px) { .frow { grid-template-columns: 88px 1fr; gap: 10px; } .fdrop { grid-column: 2; text-align: left; min-width: 0; margin-top: -2px; } }
+  .fname { color: var(--muted); font-size: 0.86rem; font-weight: 560; }
+  .ftrack { position: relative; height: 42px; border-radius: 10px; background: var(--surface-2); overflow: hidden; min-width: 0; }
+  .ffill { height: 100%; border-radius: 10px; background: var(--accent);
+    display: flex; align-items: center; padding: 0 14px; min-width: 44px;
+    transition: width 800ms var(--ease); }
+  .ffill.win { background: var(--good); }
+  .ffill .fcount { font-size: 1.15rem; font-weight: 760; color: oklch(0.16 0.02 265); letter-spacing: -0.02em; }
+  .fdrop { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); min-width: 86px; text-align: right; }
+  .fdrop .lost { color: var(--warn); font-weight: 600; }
+  .fdrop.ok .lost { color: var(--good); }
+
+  /* ---- heatmap (ranked meters) ---- */
+  .heat { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 11px; }
+  .hcell { background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: 13px; padding: 14px 15px 15px; position: relative; }
+  .hcell.top { border-color: color-mix(in oklch, var(--accent) 55%, var(--line)); }
+  .hcell .hz { font-weight: 680; font-size: 0.96rem; letter-spacing: -0.01em; }
+  .hcell .hsku { color: var(--faint); font-size: 0.74rem; font-family: var(--mono); margin-top: 1px; }
+  .hcell .hnum { display: flex; align-items: baseline; gap: 6px; margin: 11px 0 9px; }
+  .hcell .hvis { font-size: 1.65rem; font-weight: 740; letter-spacing: -0.03em; line-height: 1; }
+  .hcell .hvl { color: var(--muted); font-size: 0.8rem; }
+  .hcell .hdwell { color: var(--faint); font-size: 0.78rem; font-family: var(--mono); }
+  .meter { height: 6px; border-radius: 3px; background: color-mix(in oklch, var(--line) 60%, transparent); overflow: hidden; margin-top: 11px; }
+  .meter > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); transition: width 800ms var(--ease); }
+  .rank { position: absolute; top: 13px; right: 14px; font-family: var(--mono); font-size: 0.72rem; color: var(--faint); }
+
+  /* ---- anomalies ---- */
+  .anom { border-radius: 12px; padding: 13px 15px; margin-bottom: 10px; border: 1px solid var(--line-soft); background: var(--surface-2); }
+  .anom:last-child { margin-bottom: 0; }
+  .anom.CRITICAL { background: color-mix(in oklch, var(--crit) 14%, var(--surface-2)); border-color: color-mix(in oklch, var(--crit) 45%, var(--line)); }
+  .anom.WARN { background: color-mix(in oklch, var(--warn) 11%, var(--surface-2)); border-color: color-mix(in oklch, var(--warn) 38%, var(--line)); }
+  .anom .head { display: flex; align-items: center; gap: 10px; }
+  .sev { font-family: var(--mono); font-size: 0.7rem; font-weight: 760; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.04em; }
+  .sev.INFO { background: color-mix(in oklch, var(--accent) 24%, transparent); color: var(--accent-ink); }
+  .sev.WARN { background: color-mix(in oklch, var(--warn) 26%, transparent); color: var(--warn); }
+  .sev.CRITICAL { background: var(--crit); color: oklch(0.16 0.02 25); }
+  .anom .atype { font-weight: 640; font-size: 0.9rem; }
+  .anom .msg { margin: 8px 0 5px; font-size: 0.9rem; color: var(--ink); }
+  .anom .act { color: var(--muted); font-size: 0.83rem; }
+  .empty { color: var(--faint); font-size: 0.9rem; padding: 14px 0; text-align: center; }
+  .empty b { color: var(--good); font-weight: 600; }
+
+  /* ---- health ---- */
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--line-soft); }
+  tr:last-child td { border-bottom: none; }
+  th { color: var(--faint); font-weight: 540; font-size: 0.78rem; }
+  td.mono { font-family: var(--mono); color: var(--muted); }
+  td .sid { color: var(--ink); font-weight: 580; font-family: var(--sans); }
+  .pill { font-size: 0.7rem; font-weight: 640; padding: 3px 9px; border-radius: 6px; font-family: var(--mono); }
+  .pill.OK { background: color-mix(in oklch, var(--good) 20%, transparent); color: var(--good); }
+  .pill.STALE_FEED, .pill.NO_DATA { background: color-mix(in oklch, var(--warn) 20%, transparent); color: var(--warn); }
+
+  footer { color: var(--faint); font-size: 0.78rem; margin-top: 28px; font-family: var(--mono); display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .skeleton { color: transparent !important; background: linear-gradient(90deg, var(--surface-2), var(--line-soft), var(--surface-2)); background-size: 200% 100%; border-radius: 6px; animation: shimmer 1.4s linear infinite; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* consolidated narrow-viewport overrides (placed last so they win source order) */
+  @media (max-width: 560px) {
+    .frow { grid-template-columns: 80px 1fr; gap: 10px; }
+    .fdrop { grid-column: 2; text-align: left; min-width: 0; margin-top: -2px; }
+    .ns-value { font-size: clamp(2.6rem, 13vw, 3.4rem); }
+    .northstar { padding: 22px 20px 24px; }
+    .panel { padding: 18px 16px; }
+    .wrap { padding: 22px 16px 56px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Store Intelligence</h1>
+      <span class="sub">Apex Retail · offline conversion, live</span>
+    </div>
+    <div class="controls">
+      <label class="live" for="store" style="gap:9px">store
+        <select id="store" aria-label="Select store"></select>
+      </label>
+      <span class="live"><span id="dot" class="dot pulse"></span><span id="status">connecting…</span></span>
+    </div>
+  </header>
+
+  <section class="hero" aria-label="North Star metric and live vitals">
+    <div class="northstar">
+      <div class="ns-label"><span class="star">★</span> Offline conversion rate</div>
+      <div class="ns-value num" id="ns-value">—</div>
+      <div class="ns-sub" id="ns-sub"></div>
+    </div>
+    <div class="vitals" id="vitals"></div>
+  </section>
+  <p id="ctx" class="ctx" hidden></p>
+
+  <section class="panel">
+    <div class="panel-h"><h2>Conversion funnel</h2><span class="hint">session is the unit · re-entries counted once</span></div>
+    <div class="funnel" id="funnel" aria-live="polite"></div>
+  </section>
+
+  <div class="cols">
+    <section class="panel">
+      <div class="panel-h"><h2>Zone attention</h2><span class="hint" id="heat-conf"></span></div>
+      <div class="heat" id="heat"></div>
+    </section>
+    <div>
+      <section class="panel">
+        <div class="panel-h"><h2>Active anomalies</h2><span class="hint" id="anom-count"></span></div>
+        <div id="anomalies"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-h"><h2>Feed health</h2><span class="hint">on-call · STALE_FEED &gt; 10 min</span></div>
+        <table id="health"><thead><tr><th>store</th><th>last event</th><th>lag</th><th>status</th></tr></thead><tbody></tbody></table>
+      </section>
+    </div>
+  </div>
+
+  <footer><span id="foot">connecting…</span></footer>
+</div>
+
+<script>
+const $ = (s, r=document) => r.querySelector(s);
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function fmtLag(s){
+  if (s == null) return '—';
+  const a = Math.abs(s), sg = s < 0 ? '-' : '';
+  if (a < 90) return sg + Math.round(a) + 's';
+  if (a < 5400) return sg + (a/60).toFixed(1) + 'm';
+  if (a < 172800) return sg + (a/3600).toFixed(1) + 'h';
+  return sg + (a/86400).toFixed(1) + 'd';
+}
+const inr = v => '₹' + Math.round(v||0).toLocaleString('en-IN');
+const prev = {};
+
+async function getJSON(url){ const r = await fetch(url); if(!r.ok) throw new Error(url+' '+r.status); return r.json(); }
+
+/* count-up that conveys "this number is live"; instant under reduced-motion or first paint */
+function animateNum(el, to, fmt){
+  const key = el.id || el.dataset.k;
+  const from = prev[key];
+  prev[key] = to;
+  if (REDUCE || from === undefined || from === to){ el.textContent = fmt(to); if(from!==undefined && from!==to) flashEl(el); return; }
+  flashEl(el);
+  const t0 = performance.now(), dur = 520;
+  function step(t){
+    const k = Math.min(1, (t-t0)/dur), e = 1 - Math.pow(1-k, 3);
+    el.textContent = fmt(from + (to-from)*e);
+    if (k < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function flashEl(el){ el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+
+async function loadStores(){
+  const data = await getJSON('/stores');
+  const sel = $('#store');
+  sel.innerHTML = data.stores.map(s => `<option value="${s}">${s}</option>`).join('');
+  if (data.stores.includes('ST1008')) sel.value = 'ST1008';
+}
+
+function renderHero(m){
+  animateNum($('#ns-value'), m.conversion_rate*100, v => v.toFixed(1) + '%');
+  $('#ns-sub').innerHTML = `<b>${m.converted_visitors}</b> of <b>${m.unique_visitors}</b> visitors bought · observed window`;
+  const vitals = [
+    { k:'v-vis', num: m.unique_visitors, fmt: v=>Math.round(v), label:'Unique visitors', delta:`${m.billing_visitors} reached billing` },
+    { k:'v-sales', num: m.store_sales_today_inr, fmt: v=>inr(v), label:'Sales today', delta:`${m.store_orders_today} orders · ${m.purchases} in window` },
+    { k:'v-queue', num: m.current_queue_depth, fmt: v=>Math.round(v), label:'Queue depth', delta:`abandon ${(m.abandonment_rate*100).toFixed(0)}%` },
+  ];
+  $('#vitals').innerHTML = vitals.map(v => `<div class="vital">
+      <span class="v-num num" id="${v.k}">—</span>
+      <span class="v-meta"><div class="v-label">${v.label}</div><div class="v-delta">${v.delta}</div></span>
+    </div>`).join('');
+  vitals.forEach(v => animateNum($('#'+v.k), v.num, v.fmt));
+
+  const ctx = $('#ctx');
+  const winMin = Math.round((new Date(m.window.end) - new Date(m.window.start))/60000);
+  if (m.purchases === 0 && m.store_orders_today > 0){
+    // Explain why the in-window POS purchase count is 0 while conversion can still be > 0:
+    // conversion is measured from billing "served" (queue_completed) events, not POS-in-window.
+    ctx.hidden = false;
+    ctx.innerHTML = `<b>Purchases (window) = 0</b>: no POS receipt timestamp falls inside this `
+      + `<b>${winMin}-min observed window</b> (the store's <b>${m.store_orders_today} sales / `
+      + `${inr(m.store_sales_today_inr)}</b> are elsewhere in the day). Conversion `
+      + `(<b>${(m.conversion_rate*100).toFixed(1)}%</b>) is computed from billing checkouts `
+      + `(queue “served” events), so it still reflects who actually bought.`;
+  } else { ctx.hidden = true; }
+}
+
+function renderFunnel(f){
+  const top = f.stages[0]?.count || 1;
+  $('#funnel').innerHTML = f.stages.map((s, i) => {
+    const pct = Math.max(3, 100 * s.count / top);
+    const isLast = i === f.stages.length - 1;
+    const drop = s.drop_off_from_previous;
+    const dropTxt = i === 0 ? `${s.count} sessions`
+      : (drop > 0 ? `<span class="lost">−${(drop*100).toFixed(0)}%</span> kept ${Math.round(100*s.count/top)}%`
+                  : `kept ${Math.round(100*s.count/top)}%`);
+    return `<div class="frow">
+      <span class="fname">${s.stage.replace('_',' ')}</span>
+      <div class="ftrack"><div class="ffill ${isLast && s.count>0 ? 'win':''}" style="width:${pct}%"><span class="fcount num">${s.count}</span></div></div>
+      <span class="fdrop ${drop>=0.5?'':'ok'}">${dropTxt}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderHeat(h){
+  $('#heat-conf').textContent = h.data_confidence === 'LOW' ? `low confidence · ${h.sessions} sessions` : `${h.sessions} sessions`;
+  const cells = [...h.cells].sort((a,b) => b.visits - a.visits);
+  $('#heat').innerHTML = cells.map((c, i) => `
+    <div class="hcell ${i===0 && c.visits>0 ? 'top':''}">
+      <span class="rank">#${i+1}</span>
+      <div class="hz">${c.zone_id}</div>
+      <div class="hsku">${c.sku_zone||'—'}</div>
+      <div class="hnum"><span class="hvis num">${c.visits}</span><span class="hvl">visits</span></div>
+      <div class="hdwell">${c.avg_dwell_seconds}s avg dwell</div>
+      <div class="meter"><i style="width:${c.visit_intensity}%"></i></div>
+    </div>`).join('') || `<div class="empty">No zone activity in window.</div>`;
+}
+
+function renderAnomalies(a){
+  $('#anom-count').textContent = a.active_count ? `${a.active_count} active` : '';
+  if (!a.anomalies.length){ $('#anomalies').innerHTML = `<div class="empty"><b>All clear.</b> No active anomalies.</div>`; return; }
+  $('#anomalies').innerHTML = a.anomalies.map(an => `
+    <div class="anom ${an.severity}">
+      <div class="head"><span class="sev ${an.severity}">${an.severity}</span><span class="atype">${an.type.replace(/_/g,' ')}</span></div>
+      <div class="msg">${an.message}</div>
+      <div class="act">→ ${an.suggested_action}</div>
+    </div>`).join('');
+}
+
+function renderHealth(h){
+  $('#health tbody').innerHTML = h.stores.map(s => `
+    <tr><td><span class="sid">${s.store_id}</span></td>
+      <td class="mono">${s.last_event_at ? s.last_event_at.slice(11,19) : '—'}</td>
+      <td class="mono">${fmtLag(s.lag_seconds)}</td>
+      <td><span class="pill ${s.status}">${s.status.replace('_',' ')}</span></td></tr>`).join('');
+  const dot = $('#dot'), st = $('#status');
+  if (h.db === 'down'){ dot.className='dot down'; st.textContent='DB unavailable'; }
+  else if (h.status === 'warning'){ dot.className='dot pulse stale'; st.textContent='stale feed'; }
+  else { dot.className='dot pulse'; st.textContent='live'; }
+}
+
+async function tick(){
+  const store = $('#store').value;
+  if (!store) return;
+  try {
+    const [m,f,h,a,hl] = await Promise.all([
+      getJSON(`/stores/${store}/metrics`), getJSON(`/stores/${store}/funnel`),
+      getJSON(`/stores/${store}/heatmap`), getJSON(`/stores/${store}/anomalies`), getJSON('/health'),
+    ]);
+    renderHero(m); renderFunnel(f); renderHeat(h); renderAnomalies(a); renderHealth(hl);
+    $('#foot').textContent = `updated ${new Date().toLocaleTimeString()} · window ${m.window.start.slice(0,10)} ${m.window.start.slice(11,16)}→${m.window.end.slice(11,16)} UTC · auto-refresh 2s`;
+  } catch(e){
+    $('#status').textContent = 'error'; $('#dot').className = 'dot down';
+    $('#foot').textContent = String(e);
+  }
+}
+
+(async function init(){
+  await loadStores();
+  $('#store').addEventListener('change', () => { for (const k in prev) delete prev[k]; tick(); });
+  await tick();
+  setInterval(tick, 2000);
+})();
+</script>
+</body>
+</html>

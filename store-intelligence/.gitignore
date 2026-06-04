@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.db
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+events/
+data/events_store*.jsonl   # per-store detection intermediates; data/events.jsonl is the committed seed
+data/clips/
+data/synthetic/
+tools/frames/        # extracted CCTV stills — challenge-use-only, never redistribute
+*.pt
+.DS_Store

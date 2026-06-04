@@ -1,0 +1,84 @@
+{
+  "_note": "Two real challenge stores. Store 1 = Brigade Road, Bangalore (ST1008) — clips role-labelled in 'CCTV Footage/Store 1' (CAM 3=entry, CAM 5=billing, CAM 1 & 2=zone/floor), floor plan in 'Store 1 - layout.png', and the Purplle POS export is for this store/day (2026-04-10). Store 2 = a second Purplle store (ST2002, placeholder id) in 'CCTV Footage/Store 2' (entry 1, entry 2, billing_area, zone), floor plan in 'store 2 - layout.png'; no POS feed, and its cameras are not time-synced, so their `start` is aligned to one window for a coherent view. Per-camera `start` (UTC) is read from the burned-in on-screen clock. Footage is challenge-use-only and NOT committed; drop it under '../../CCTV Footage/<Store>/' to regenerate events.",
+  "stores": {
+    "ST1008": {
+      "name": "Brigade_Bangalore",
+      "city": "Bangalore",
+      "open_hours": { "open": "10:00", "close": "22:00", "tz": "Asia/Kolkata" },
+      "staff_uniform": ["red"],
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry", "covers": ["ENTRANCE"],
+          "video": "../../CCTV Footage/Store 1/CAM 3 - entry.mp4",
+          "fps": 29.97, "start": "2026-04-10T14:40:00Z",
+          "line_px": [[1250, 0], [1250, 1080]],
+          "_comment": "glass-door threshold; store interior is LEFT of the line (x<1250), mall corridor RIGHT"
+        },
+        "CAM_SKIN_01": {
+          "role": "floor", "covers": ["SKIN"],
+          "video": "../../CCTV Footage/Store 1/CAM 1 - zone.mp4",
+          "fps": 29.97, "start": "2026-04-10T14:40:27Z"
+        },
+        "CAM_MAKEUP_01": {
+          "role": "floor", "covers": ["MAKEUP", "HAIRCARE"],
+          "video": "../../CCTV Footage/Store 1/CAM 2 - zone.mp4",
+          "fps": 29.97, "start": "2026-04-10T14:40:02Z",
+          "_comment": "bottom wall; pixel polygons split the 1920x1080 frame into HAIRCARE (x<600) and MAKEUP (x>=600)",
+          "zones_px": {
+            "HAIRCARE": [[0, 0], [600, 0], [600, 1080], [0, 1080]],
+            "MAKEUP": [[600, 0], [1920, 0], [1920, 1080], [600, 1080]]
+          }
+        },
+        "CAM_BILLING_01": {
+          "role": "billing", "covers": ["BILLING"],
+          "video": "../../CCTV Footage/Store 1/CAM 5 - billing.mp4",
+          "fps": 24.98, "start": "2026-04-10T14:39:48Z"
+        }
+      },
+      "zones": {
+        "ENTRANCE": { "type": "threshold" },
+        "SKIN": { "type": "product", "sku_zone": "SKINCARE" },
+        "MAKEUP": { "type": "product", "sku_zone": "MAKEUP" },
+        "HAIRCARE": { "type": "product", "sku_zone": "HAIRCARE" },
+        "BILLING": { "type": "billing" }
+      }
+    },
+    "ST2002": {
+      "name": "Purplle_Store2",
+      "city": "Bangalore",
+      "open_hours": { "open": "10:00", "close": "22:00", "tz": "Asia/Kolkata" },
+      "staff_uniform": ["dark"],
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry", "covers": ["ENTRANCE"],
+          "video": "../../CCTV Footage/Store 2/entry 1.mp4",
+          "fps": 25.0, "start": "2026-03-29T14:10:00Z",
+          "line_px": [[0, 360], [960, 360]],
+          "_comment": "960x1080; mall corridor at TOP (y<360), store interior BELOW; inbound = downward"
+        },
+        "CAM_ENTRY_02": {
+          "role": "entry", "covers": ["ENTRANCE"],
+          "video": "../../CCTV Footage/Store 2/entry 2.mp4",
+          "fps": 25.0, "start": "2026-03-29T14:10:00Z",
+          "line_px": [[0, 360], [960, 360]]
+        },
+        "CAM_FLOOR_01": {
+          "role": "floor", "covers": ["DISPLAY"],
+          "video": "../../CCTV Footage/Store 2/zone.mp4",
+          "fps": 25.0, "start": "2026-03-29T14:10:00Z",
+          "_comment": "product wall shelves (one observed floor zone)"
+        },
+        "CAM_BILLING_01": {
+          "role": "billing", "covers": ["BILLING"],
+          "video": "../../CCTV Footage/Store 2/billing_area.mp4",
+          "fps": 25.0, "start": "2026-03-29T14:10:00Z"
+        }
+      },
+      "zones": {
+        "ENTRANCE": { "type": "threshold" },
+        "DISPLAY": { "type": "product", "sku_zone": "MIXED" },
+        "BILLING": { "type": "billing" }
+      }
+    }
+  }
+}

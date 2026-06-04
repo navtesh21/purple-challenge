@@ -1,0 +1,304 @@
+{
+  "stores": {
+    "STORE_BLR_002": {
+      "city": "Bengaluru",
+      "open_hours": {
+        "open": "09:00",
+        "close": "21:00",
+        "tz": "Asia/Kolkata"
+      },
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry",
+          "covers": [
+            "ENTRANCE"
+          ]
+        },
+        "CAM_FLOOR_01": {
+          "role": "floor",
+          "covers": [
+            "SKINCARE",
+            "MAKEUP",
+            "HAIRCARE",
+            "FRAGRANCE",
+            "WELLNESS"
+          ]
+        },
+        "CAM_BILLING_01": {
+          "role": "billing",
+          "covers": [
+            "BILLING"
+          ]
+        }
+      },
+      "zones": {
+        "ENTRANCE": {
+          "type": "threshold"
+        },
+        "SKINCARE": {
+          "type": "product",
+          "sku_zone": "MOISTURISER"
+        },
+        "MAKEUP": {
+          "type": "product",
+          "sku_zone": "LIPSTICK"
+        },
+        "HAIRCARE": {
+          "type": "product",
+          "sku_zone": "SHAMPOO"
+        },
+        "FRAGRANCE": {
+          "type": "product",
+          "sku_zone": "PERFUME"
+        },
+        "WELLNESS": {
+          "type": "product",
+          "sku_zone": "SUPPLEMENTS"
+        },
+        "BILLING": {
+          "type": "billing"
+        }
+      }
+    },
+    "STORE_BLR_001": {
+      "city": "Bengaluru",
+      "open_hours": {
+        "open": "09:00",
+        "close": "21:00",
+        "tz": "Asia/Kolkata"
+      },
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry",
+          "covers": [
+            "ENTRANCE"
+          ]
+        },
+        "CAM_FLOOR_01": {
+          "role": "floor",
+          "covers": [
+            "SKINCARE",
+            "MAKEUP",
+            "HAIRCARE",
+            "FRAGRANCE",
+            "WELLNESS"
+          ]
+        },
+        "CAM_BILLING_01": {
+          "role": "billing",
+          "covers": [
+            "BILLING"
+          ]
+        }
+      },
+      "zones": {
+        "ENTRANCE": {
+          "type": "threshold"
+        },
+        "SKINCARE": {
+          "type": "product",
+          "sku_zone": "MOISTURISER"
+        },
+        "MAKEUP": {
+          "type": "product",
+          "sku_zone": "LIPSTICK"
+        },
+        "HAIRCARE": {
+          "type": "product",
+          "sku_zone": "SHAMPOO"
+        },
+        "FRAGRANCE": {
+          "type": "product",
+          "sku_zone": "PERFUME"
+        },
+        "WELLNESS": {
+          "type": "product",
+          "sku_zone": "SUPPLEMENTS"
+        },
+        "BILLING": {
+          "type": "billing"
+        }
+      }
+    },
+    "STORE_DEL_001": {
+      "city": "Delhi",
+      "open_hours": {
+        "open": "09:00",
+        "close": "21:00",
+        "tz": "Asia/Kolkata"
+      },
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry",
+          "covers": [
+            "ENTRANCE"
+          ]
+        },
+        "CAM_FLOOR_01": {
+          "role": "floor",
+          "covers": [
+            "SKINCARE",
+            "MAKEUP",
+            "HAIRCARE",
+            "FRAGRANCE",
+            "WELLNESS"
+          ]
+        },
+        "CAM_BILLING_01": {
+          "role": "billing",
+          "covers": [
+            "BILLING"
+          ]
+        }
+      },
+      "zones": {
+        "ENTRANCE": {
+          "type": "threshold"
+        },
+        "SKINCARE": {
+          "type": "product",
+          "sku_zone": "MOISTURISER"
+        },
+        "MAKEUP": {
+          "type": "product",
+          "sku_zone": "LIPSTICK"
+        },
+        "HAIRCARE": {
+          "type": "product",
+          "sku_zone": "SHAMPOO"
+        },
+        "FRAGRANCE": {
+          "type": "product",
+          "sku_zone": "PERFUME"
+        },
+        "WELLNESS": {
+          "type": "product",
+          "sku_zone": "SUPPLEMENTS"
+        },
+        "BILLING": {
+          "type": "billing"
+        }
+      }
+    },
+    "STORE_MUM_001": {
+      "city": "Mumbai",
+      "open_hours": {
+        "open": "09:00",
+        "close": "21:00",
+        "tz": "Asia/Kolkata"
+      },
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry",
+          "covers": [
+            "ENTRANCE"
+          ]
+        },
+        "CAM_FLOOR_01": {
+          "role": "floor",
+          "covers": [
+            "SKINCARE",
+            "MAKEUP",
+            "HAIRCARE",
+            "FRAGRANCE",
+            "WELLNESS"
+          ]
+        },
+        "CAM_BILLING_01": {
+          "role": "billing",
+          "covers": [
+            "BILLING"
+          ]
+        }
+      },
+      "zones": {
+        "ENTRANCE": {
+          "type": "threshold"
+        },
+        "SKINCARE": {
+          "type": "product",
+          "sku_zone": "MOISTURISER"
+        },
+        "MAKEUP": {
+          "type": "product",
+          "sku_zone": "LIPSTICK"
+        },
+        "HAIRCARE": {
+          "type": "product",
+          "sku_zone": "SHAMPOO"
+        },
+        "FRAGRANCE": {
+          "type": "product",
+          "sku_zone": "PERFUME"
+        },
+        "WELLNESS": {
+          "type": "product",
+          "sku_zone": "SUPPLEMENTS"
+        },
+        "BILLING": {
+          "type": "billing"
+        }
+      }
+    },
+    "STORE_HYD_001": {
+      "city": "Hyderabad",
+      "open_hours": {
+        "open": "09:00",
+        "close": "21:00",
+        "tz": "Asia/Kolkata"
+      },
+      "cameras": {
+        "CAM_ENTRY_01": {
+          "role": "entry",
+          "covers": [
+            "ENTRANCE"
+          ]
+        },
+        "CAM_FLOOR_01": {
+          "role": "floor",
+          "covers": [
+            "SKINCARE",
+            "MAKEUP",
+            "HAIRCARE",
+            "FRAGRANCE",
+            "WELLNESS"
+          ]
+        },
+        "CAM_BILLING_01": {
+          "role": "billing",
+          "covers": [
+            "BILLING"
+          ]
+        }
+      },
+      "zones": {
+        "ENTRANCE": {
+          "type": "threshold"
+        },
+        "SKINCARE": {
+          "type": "product",
+          "sku_zone": "MOISTURISER"
+        },
+        "MAKEUP": {
+          "type": "product",
+          "sku_zone": "LIPSTICK"
+        },
+        "HAIRCARE": {
+          "type": "product",
+          "sku_zone": "SHAMPOO"
+        },
+        "FRAGRANCE": {
+          "type": "product",
+          "sku_zone": "PERFUME"
+        },
+        "WELLNESS": {
+          "type": "product",
+          "sku_zone": "SUPPLEMENTS"
+        },
+        "BILLING": {
+          "type": "billing"
+        }
+      }
+    }
+  }
+}

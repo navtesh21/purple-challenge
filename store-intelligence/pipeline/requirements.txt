@@ -1,0 +1,7 @@
+# Detection pipeline deps (Part A). Kept separate from the API so the API image
+# stays light and the API never imports a CV stack it doesn't need.
+ultralytics==8.3.55      # YOLOv8/v9 detection + built-in ByteTrack tracker
+opencv-python==4.10.0.84
+numpy==2.2.1
+scipy==1.15.0            # Hungarian assignment for cross-camera / re-id matching
+requests==2.32.3         # POST emitted events to the API

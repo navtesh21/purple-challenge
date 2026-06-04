@@ -1,0 +1,38 @@
+# `docker compose up` starts everything: Postgres + the Intelligence API.
+# No manual steps beyond `git clone`. The API waits for Postgres to be healthy,
+# creates its tables on boot, and seeds POS data from data/pos_transactions.csv.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: apex
+      POSTGRES_PASSWORD: apex
+      POSTGRES_DB: store_intel
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apex -d store_intel"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg2://apex:apex@db:5432/store_intel
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    # mount the dataset + dashboard read-only so POS/layout seeding and the live UI come
+    # from disk (dashboard tweaks need only a browser refresh, no image rebuild).
+    volumes:
+      - ./data:/srv/data:ro
+      - ./dashboard:/srv/dashboard:ro
+
+volumes:
+  pgdata:
