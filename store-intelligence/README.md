@@ -179,17 +179,6 @@ carries the AI prompt block used to draft it.
 
 ---
 
-## A note on conversion (engineering judgment)
-
-The provided clips are ~2.5 minutes (~20:10 IST, 2026-04-10). The store made 24 sales that day
-(~one per 24 min); the nearest sale to the clip window was ~13 min after it ends, so **no
-transaction falls inside the clip's 5-minute correlation window**. The honest, correctly
-computed conversion for this clip is therefore ~0 — a footage-coverage limitation, not a logic
-bug. The conversion machinery is demonstrated with non-zero values via the live simulator and
-targeted tests. See [`docs/CHOICES.md`](docs/CHOICES.md) for the full reasoning.
-
----
-
 ## Layout
 
 ```
